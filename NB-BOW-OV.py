@@ -58,8 +58,8 @@ def getProbabilityForEachWordQ1():
     smoothingOfDenominator = smoothingValue * len(vocabulary)
 
     for word in vocabulary:
-        vocabulary[word]['p_q1_yes'] = (vocabulary[word]['frequency_q1_yes'] + smoothingValue) / (features['q1']['yes']['totalWords'] + smoothingValue)
-        vocabulary[word]['p_q1_no'] = (vocabulary[word]['frequency_q1_no'] + smoothingValue) / (features['q1']['no']['totalWords'] + smoothingValue)
+        vocabulary[word]['p_q1_yes'] = (vocabulary[word]['frequency_q1_yes'] + smoothingValue) / (features['q1']['yes']['totalWords'] + smoothingOfDenominator)
+        vocabulary[word]['p_q1_no'] = (vocabulary[word]['frequency_q1_no'] + smoothingValue) / (features['q1']['no']['totalWords'] + smoothingOfDenominator)
 
 def getProbabiltyOfQ1():
     numberOfYes = 0
@@ -76,12 +76,13 @@ def getProbabiltyOfQ1():
 
 def getScoresForAllWords(words, label):
     score = 0
+    smoothingOfDenominator = smoothingValue * len(vocabulary)
 
     for word in words:
         if word in vocabulary:
             score += math.log10(vocabulary[word]['p_q1_' + label])
         else:
-            score += math.log10(smoothingValue / (features['q1'][label]['totalWords'] + smoothingValue))
+            score += math.log10(smoothingValue / (features['q1'][label]['totalWords'] + smoothingOfDenominator))
 
     return score
 

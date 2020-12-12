@@ -4,7 +4,7 @@ trainingData = "covid_training.tsv"
 testData = "covid_test_public.tsv"
 lolol = "test.tsv"
 
-with open(lolol) as f:
+with open(lolol, encoding="utf8") as f:
     next(f)
     tweet = []
     label = []

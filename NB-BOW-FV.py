@@ -104,7 +104,7 @@ def filterVocabulary():
     while repeat:
         repeat = False
         for word in vocabulary:
-            if vocabulary[word]['frequency_q1_yes'] + vocabulary[word]['frequency_q1_no'] > 2:
+            if vocabulary[word]['frequency_q1_yes'] + vocabulary[word]['frequency_q1_no'] < 2:
                 if vocabulary[word]['frequency_q1_yes'] > 0:
                     features['q1']['yes']['totalWords'] -= 1
                 else:

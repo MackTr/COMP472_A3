@@ -13,6 +13,7 @@ results = []
 
 smoothingValue = 0.01
 
+# Open training set file and adds it to the training_tweets array
 def openFileTrainingSet():
     with open(trainingData, encoding="utf8") as file:
         next(file)
@@ -25,6 +26,7 @@ def openFileTrainingSet():
             content = data[1:-7]
             training_tweets.append({"content": content, "label" : label})
 
+# Open training set file and adds it to the test_tweets array
 def openFileTestSet():
     with open(testData, encoding="utf8") as file:
 
@@ -37,6 +39,7 @@ def openFileTestSet():
             id = data[0]
             test_tweets.append({"content": content, "label": label, "id": id})
 
+# Creates the vocabulary dictionary
 def getVocabulary():
 
     for tweet in training_tweets:
@@ -44,6 +47,7 @@ def getVocabulary():
             if word not in vocabulary:
                 vocabulary[word] = {'frequency_q1_yes': 0, 'frequency_q1_no': 0, 'p_q1_yes': 0, 'p_q1_no': 0}
 
+# Add the frequency of each word of the vocabulary and counts the total words for each class
 def getTotalAndFrequencyOfWordsOfQ1():
 
     for tweet in training_tweets:
@@ -56,6 +60,7 @@ def getTotalAndFrequencyOfWordsOfQ1():
             for word in tweet['content']:
                 vocabulary[word]['frequency_q1_no'] += 1
 
+# Compute the P(WORD/CLASS) for each word of the vocabulary with smoothing
 def getProbabilityForEachWordQ1():
 
     smoothingOfDenominator = smoothingValue * len(vocabulary)
@@ -64,6 +69,7 @@ def getProbabilityForEachWordQ1():
         vocabulary[word]['p_q1_yes'] = (vocabulary[word]['frequency_q1_yes'] + smoothingValue) / (features['q1']['yes']['totalWords'] + smoothingOfDenominator)
         vocabulary[word]['p_q1_no'] = (vocabulary[word]['frequency_q1_no'] + smoothingValue) / (features['q1']['no']['totalWords'] + smoothingOfDenominator)
 
+#Compute the P(CLASS)
 def getProbabiltyOfQ1():
     numberOfYes = 0
     numberOfNo = 0
@@ -77,6 +83,7 @@ def getProbabiltyOfQ1():
     features['q1']['yes']['probability'] = float(numberOfYes) / len(training_tweets)
     features['q1']['no']['probability'] = float(numberOfNo) / len(training_tweets)
 
+# Compute the score of the given tweet for Q1
 def getScoresForAllWords(words, label):
     score = 0
     smoothingOfDenominator = smoothingValue * len(vocabulary)
@@ -89,6 +96,7 @@ def getScoresForAllWords(words, label):
 
     return score
 
+# Run compute the score of each tweets and find the result
 def testModel():
     for tweet in test_tweets:
         score_q1_yes = math.log10(features['q1']['yes']['probability']) + getScoresForAllWords(tweet['content'], 'yes')
@@ -99,9 +107,11 @@ def testModel():
         else:
             results.append({'class': 'no', 'score_yes': score_q1_yes, 'score_no': score_q1_no})
 
+# Return scientific notation of given number
 def sciNotation(number):
     return "{:.2e}".format(number)
 
+# Print trace file
 def printTraceFile():
     file = open(name_trace_file, 'w')
     for index in range (0, len(results)):
@@ -116,6 +126,7 @@ def printTraceFile():
 
         file.write(line)
 
+# Compute accuracy of test
 def getAccuracy():
     total = len(test_tweets)
     correct_values = 0
@@ -124,6 +135,7 @@ def getAccuracy():
             correct_values += 1
     return str(float(correct_values)/total) + '\n'
 
+# Compute precision of test
 def getPrecision():
     total_yes = 0
     true_yes = 0
@@ -143,6 +155,7 @@ def getPrecision():
 
     return float(true_yes)/total_yes, float(true_no)/total_no
 
+# Compute recall of test
 def getRecall():
     total_yes = 0
     true_yes = 0
@@ -166,7 +179,7 @@ def getRecall():
 
     return float(true_yes)/total_yes, float(true_no)/total_no
 
-
+# Print eval file
 def printEvalFile():
     file = open(name_eval_file, 'w')
     file.write(getAccuracy())
@@ -178,7 +191,7 @@ def printEvalFile():
     f1_no = ((1 + 1) * precision_no * recall_no) / (precision_no + recall_no)
     file.write(str(f1_yes) + "  " + str(f1_no) + "\n")
 
-
+# training steps
 def trainingPhase():
     openFileTrainingSet()
     getVocabulary()
@@ -186,6 +199,7 @@ def trainingPhase():
     getTotalAndFrequencyOfWordsOfQ1()
     getProbabilityForEachWordQ1()
 
+# testing steps
 def testingPhase():
     openFileTestSet()
     testModel()

@@ -3,6 +3,7 @@
 Repo: https://github.com/MackTr/COMP472_A3
 
 Mackenzie Trenholm - 40057679
+
 Alessandro Sartor - 40042866
 
 ## Instructions to run code
@@ -15,3 +16,7 @@ python NB-BOW-FV.py
 
 # Analysis 
 Analysis files can be found in the "txt" directory (output files)
+
+
+
+#Happy holidays!

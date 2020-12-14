@@ -8,8 +8,10 @@ Alessandro Sartor - 40042866
 ## Instructions to run code
 
 # To run Naive Bayes Classifier Bag of Words Original Vocabulary 
-Run NB-BOW-OV.py
+python NB-BOW-OV.py
 
 # To run Naive Bayes Classifier Bag of Words Filtered Vocabulary
-Run NB-BOW-FV.py
+python NB-BOW-FV.py
 
+# Analysis 
+Analysis files can be found in the "txt" directory (output files)

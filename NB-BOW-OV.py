@@ -1,6 +1,6 @@
 import math
-trainingData = "covid_training.tsv"
-testData = "covid_test_public.tsv"
+trainingData = "data/covid_training.tsv"
+testData = "data/covid_test_public.tsv"
 
 test_tweets = []
 training_tweets = []
